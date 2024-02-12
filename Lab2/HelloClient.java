@@ -1,28 +1,55 @@
-import java.rmi.*;
-import java.rmi.registry.*;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 public class HelloClient {
-  public static void main(String [] args) {
-	
-	try {
-	  if (args.length < 2) {
-	   System.out.println("Usage: java HelloClient <rmiregistry host> <rmiregistry port>");
-	   return;}
-	Info_client i = new Info_client ("Jason");
-	Info_itf i_stub = (Info_itf) UnicastRemoteObject.exportObject(i, 0);
-	String host = args[0];
-	int port = Integer.parseInt(args[1]);
+    public static void main(String[] args) {
+        try {
+            if (args.length < 2) {
+                System.out.println("Usage: java HelloClient <rmiregistry host> <rmiregistry port>");
+                return;
+            }
 
-	Registry registry = LocateRegistry.getRegistry(host, port); 
-	Hello h = (Hello) registry.lookup("HelloService");
+            String host = args[0];
+            int port = Integer.parseInt(args[1]);
 
-	// Remote method invocation
-	String res = h.sayHello("moi");
-	System.out.println(res);
+            // Create client objects
+            Info_client infoClient = new Info_client("Jason");
+            AccountingImpl accountingClient = new AccountingImpl();
 
-	} catch (Exception e)  {
-//		System.err.println("Error on client: " + e);
-		e.printStackTrace();
-	}
-  }
+            // Export client objects as stubs
+            Info_itf infoStub = (Info_itf) UnicastRemoteObject.exportObject(infoClient, 0);
+            Accounting_itf accountingStub = (Accounting_itf) UnicastRemoteObject.exportObject(accountingClient, 0);
+
+            // Get registry
+            Registry registry = LocateRegistry.getRegistry(host, port);
+
+            // Lookup server services
+            Hello helloService = (Hello) registry.lookup("HelloService");
+            Hello2 hello2Service = (Hello2) registry.lookup("Hello2Service");
+            Registry_itf registryService = (Registry_itf) registry.lookup("RegistryService");
+
+            // Register accounting client with the server
+            registryService.register(accountingStub);
+
+            // Remote method invocation
+            String res = helloService.sayHello(infoStub);
+            System.out.println(res);
+            String res2 = hello2Service.sayHello(accountingStub);
+            System.out.println(res2);
+             res2 = hello2Service.sayHello(accountingStub);
+            System.out.println(res2);
+             res2 = hello2Service.sayHello(accountingStub);
+            System.out.println(res2);
+             res2 = hello2Service.sayHello(accountingStub);
+            System.out.println(res2);
+             res2 = hello2Service.sayHello(accountingStub);
+            System.out.println(res2);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

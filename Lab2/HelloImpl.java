@@ -1,4 +1,3 @@
-
 import java.rmi.*;
 
 public  class HelloImpl implements Hello {
@@ -9,7 +8,8 @@ public  class HelloImpl implements Hello {
 		message = s ;
 	}
 
-	public String sayHello(String clientName) throws RemoteException {
+	public String sayHello(Info_itf name) throws RemoteException {
+		String clientName = name.getName();
 		return message+" "+clientName ;
 	}
 }
