@@ -6,7 +6,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class HelloClient {
     public static void main(String[] args) {
         try {
-            if (args.length < 4) {
+            if (args.length < 3) {
                 System.out.println("Usage: java HelloClient <rmiregistry host> <rmiregistry port>");
                 return;
             }
@@ -22,8 +22,7 @@ public class HelloClient {
             // Export client objects as stubs
             Info_itf infoStub = (Info_itf) UnicastRemoteObject.exportObject(infoClient, 0);
             Accounting_itf accountingStub = (Accounting_itf) UnicastRemoteObject.exportObject(accountingClient, 0);
-            ClientManagerImpl manager = new ClientManagerImpl();
-            ClientManager_itf manager_stub= (ClientManager_itf) UnicastRemoteObject.exportObject(manager, 0);
+
             // Get registry
             Registry registry = LocateRegistry.getRegistry(host, port);
 
@@ -31,9 +30,9 @@ public class HelloClient {
             Hello helloService = (Hello) registry.lookup("HelloService");
             Hello2 hello2Service = (Hello2) registry.lookup("Hello2Service");
             Registry_itf registryService = (Registry_itf) registry.lookup("RegistryService");
-            registry.rebind(args[3], manager_stub);
+
             // Register accounting client with the server
-            registryService.register(accountingStub,args[3]);
+            registryService.register(accountingStub);
 
             // Remote method invocation
             String res = helloService.sayHello(infoStub);
@@ -48,7 +47,6 @@ public class HelloClient {
             System.out.println(res2);
              res2 = hello2Service.sayHello(accountingStub);
             System.out.println(res2);
-            registryService.send("coucou",registry);
 
 
         } catch (Exception e) {
