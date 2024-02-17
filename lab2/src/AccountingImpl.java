@@ -17,8 +17,5 @@ public class AccountingImpl implements Accounting_itf {
     public int getCallCount(){
         return callCount;
     }
-    public void setCallCount(int i){
-        this.callCount=i;
-    }
     
 }

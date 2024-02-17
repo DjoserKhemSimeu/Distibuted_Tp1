@@ -14,9 +14,9 @@ public class Hello2Impl implements Hello2 {
 
     @Override
     public String sayHello(Accounting_itf client) throws RemoteException {
-        client.setCallCount(client.getCallCount()+1);
-        client.numberOfCalls(client.getCallCount());
+        callCount ++;
+        client.numberOfCalls(callCount);
 
-        return "Hello from Hello2! Number of calls: " + client.getCallCount();
+        return "Hello from Hello2! Number of calls: " + callCount;
     }
 }
