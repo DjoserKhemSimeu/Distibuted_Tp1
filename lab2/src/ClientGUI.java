@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.List;
 
 public class ClientGUI extends JFrame {
     private Server_interface server;
@@ -21,14 +20,16 @@ public class ClientGUI extends JFrame {
         this.clientName = clientName;
 
         try {
-            client = new ClientImpl(clientName, this); // Pass the ClientGUI instance
-            server.joinChat(client); // Join the chat
-
-            // After joining the chat, request the chat history from the server
-            List<String> historyMessages = server.requestChatHistory();
-            displayChatHistory(historyMessages); // Display the chat history in the GUI
-        } catch (IOException e) {
+            client = new ClientImpl(clientName, this);
+            try {
+                server.joinChat(client);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (RemoteException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to join chat: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,14 +86,13 @@ public class ClientGUI extends JFrame {
     }
 
     public void receiveMessage(String message) {
-        chatArea.append(message + "\n");
-    }
-
-    public void displayChatHistory(List<String> historyMessages) {
-        for (String message : historyMessages) {
-            receiveMessage(message);
+        if (chatArea != null) {
+            chatArea.append(message + "\n");
+        } else {
+            System.err.println("ChatArea is null. Message not appended: " + message);
         }
     }
+    
 
     public static void main(String[] args) {
         if (args.length < 3) {

@@ -16,15 +16,12 @@ public class ClientChat {
             String clientName= args[2];
             int port = Integer.parseInt(args[1]);
 
-            // Get registry
             Registry registry = LocateRegistry.getRegistry(host, port);
 
             Server_interface s = (Server_interface) registry.lookup("ChatService");
 
-            // Instantiate ClientGUI
             ClientGUI clientGUI = new ClientGUI(s, clientName);
 
-            // Instantiate ClientImpl with a reference to ClientGUI
             Client_interface c = new ClientImpl(clientName, clientGUI);
 
             s.joinChat(c);
@@ -32,7 +29,6 @@ public class ClientChat {
             try (Scanner scanner = new Scanner(System.in)) {
                 String message;
                 while (true) {
-                    // Read user input
                     System.out.print("\n"+clientName +": ");
                     message = scanner.nextLine();
                     
@@ -44,15 +40,13 @@ public class ClientChat {
 
                     // Check for exit command
                     if (message.equalsIgnoreCase("exit")) {
-                        break; // Exit loop and terminate client
+                        break;
                     }
                     
-                    // Send message to server
                     s.send(message, clientName);
                     System.out.println("\n");
                 }
             }
-            // Leave the chat before exiting
             s.leaveChat(c);
 
 

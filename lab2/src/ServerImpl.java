@@ -1,34 +1,51 @@
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ServerImpl extends UnicastRemoteObject implements Server_interface {
+public class ServerImpl implements Server_interface {
 
     private List<Client_interface> clients;
-    private static final String HISTORY_FILE = "history/history.txt";
+    private File history;
+    private FileWriter fw;
+    BufferedReader buf;
 
     public ServerImpl() throws RemoteException {
         clients = new ArrayList<>();
+        history = new File("history/history.txt");
+        try {
+            if (!history.exists()) {
+                history.getParentFile().mkdirs();
+                history.createNewFile();
+            }
+            fw = new FileWriter(history, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Failed to initialize server: " + e.getMessage());
+        }
     }
 
     @Override
     public void joinChat(Client_interface client) throws RemoteException, IOException {
+        FileReader fr = new FileReader(history);
+        BufferedReader buf=new BufferedReader(fr);
+
         clients.add(client);
-
-        // Read the chat history
-        List<String> historyMessages = readChatHistory();
-
-        // Send the chat history to the client GUI
-        for (String message : historyMessages) {
-            client.receive(message);
-        }
-
-        // Inform other clients that the new client has joined
         sendAll(client.getName() + " has joined the chat.\n");
+
+        String line = buf.readLine();
+
+        while(line!=null){
+            client.receive(line);
+            line = buf.readLine();
+        }
+        fr.close();
+        buf.close();
     }
 
     @Override
@@ -48,39 +65,24 @@ public class ServerImpl extends UnicastRemoteObject implements Server_interface 
             try {
                 client.receive(message);
             } catch (RemoteException e) {
-                // Handle remote exception if the client is unreachable
-                // You may want to remove the client from the list in this case
                 e.printStackTrace();
             }
         }
-        // Write to the history file
-        // You might want to add the new message to the history file here as well
-    }
-
-    // Method to read the chat history from the file
-    private List<String> readChatHistory() throws IOException {
-        List<String> historyMessages = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(HISTORY_FILE))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                historyMessages.add(line);
-            }
-        }
-        return historyMessages;
-    }
-    @Override
-    public List<String> requestChatHistory() throws RemoteException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(HISTORY_FILE))) {
-            List<String> historyMessages = new ArrayList<>();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                historyMessages.add(line);
-            }
-            return historyMessages;
+        try {
+            fw.write(message + '\n');
+            fw.flush();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RemoteException("Failed to read chat history: " + e.getMessage());
         }
     }
 
+    public void close() {
+        try {
+            if (fw != null) {
+                fw.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -25,4 +25,3 @@ public class ClientImpl extends UnicastRemoteObject implements Client_interface 
         return this.name;
     }
 }
-

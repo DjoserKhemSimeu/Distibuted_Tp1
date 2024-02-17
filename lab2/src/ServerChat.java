@@ -6,7 +6,6 @@ public class ServerChat {
 
     public static void  main(String [] args) {
         try {
-            // Create a Hello remote object
             ServerImpl s = new ServerImpl();
             Server_interface s_stub = (Server_interface) UnicastRemoteObject.exportObject(s, 0);
 
