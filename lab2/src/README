@@ -7,5 +7,9 @@ rmiregistry 6090 &
 //launch the server
 java -Djava.rmi.server.hostname=localhost ServerChat 6090
 
-//launch the client
-java ClientChat localhost 6090
+//launch the client with GUI
+java ClientGUI localhost 6090 <clientName>
+
+//launch the client without GUI
+java ClientChatNoGUI localhost 6090 <clientName>
+

@@ -11,12 +11,16 @@ public class ClientImpl extends UnicastRemoteObject implements Client_interface 
         this.clientGUI = clientGUI;
     }
 
+    public ClientImpl(String name) throws RemoteException {
+        this.name = name;
+    }
+
     @Override
     public void receive(String message) throws RemoteException {
         if (clientGUI != null) {
             clientGUI.receiveMessage(message);
         } else {
-            System.err.println("ClientGUI is null. Message not received: " + message);
+            System.err.println(message);
         }
     }
 

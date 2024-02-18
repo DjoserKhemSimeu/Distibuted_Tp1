@@ -20,12 +20,7 @@ public class ClientGUI extends JFrame {
         this.clientName = clientName;
 
         try {
-            client = new ClientImpl(clientName, this);
-            try {
-                server.joinChat(client);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.client = new ClientImpl(clientName, this);
         } catch (RemoteException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to join chat: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -33,7 +28,7 @@ public class ClientGUI extends JFrame {
         }
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(600, 400);
         setLocationRelativeTo(null);
 
         initComponents();
@@ -107,13 +102,15 @@ public class ClientGUI extends JFrame {
 
             Registry registry = LocateRegistry.getRegistry(host, port);
             Server_interface server = (Server_interface) registry.lookup("ChatService");
+            ClientGUI cg = new ClientGUI(server, clientName);
+            Client_interface c = new ClientImpl(clientName, cg);
 
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    new ClientGUI(server, clientName);
                 }
             });
+            server.joinChat(c);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error connecting to server: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
