@@ -324,3 +324,51 @@ Djoser : bonjour
 Jason : bonjour
 Jason : ca va ?
 Djoser : ca va bien et toi ?
+Jason has joined the chat.
+
+Jason : hello
+Djoser has joined the chat.
+
+Djoser : bonjour
+Jason has joined the chat.
+
+Jason : bonjour
+Jason has joined the chat.
+
+Djoser has joined the chat.
+
+Djoser : bonjour
+Jason has joined the chat.
+
+Djoser has joined the chat.
+
+Djoser : bonjour
+Jason : bonjour Djoser
+Jason has joined the chat.
+
+Jason : test
+Djoser has joined the chat.
+
+Djoser : test
+Jason : bonjour djoser
+Djoser : bonjour jason
+Djoser : test
+Djoser : test
+Jason : allo ?
+Jason has joined the chat.
+
+Jason : bonjour
+Djoser has joined the chat.
+
+Djoser : bonjour
+Jason : ca va djoser ?
+Djoser : ca va bien et toi jason ?
+Jason has joined the chat.
+
+Jason : test
+Djoser has joined the chat.
+
+Djoser : test
+Djoser : test
+Djoser : test
+Jason : cool

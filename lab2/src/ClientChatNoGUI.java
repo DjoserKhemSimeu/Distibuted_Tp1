@@ -29,15 +29,11 @@ public class ClientChatNoGUI {
                 String message;
                 while (true) {
                     // Read user input
-                    System.out.print("\n"+clientName +": ");
                     message = scanner.nextLine();
                     
                     // Move cursor up one line
                     System.out.print("\033[1A");
                     
-                    // Clear the line
-                    System.out.print("\033[2K");
-
                     // Check for exit command
                     if (message.equalsIgnoreCase("exit")) {
                         break; // Exit loop and terminate client
@@ -45,7 +41,6 @@ public class ClientChatNoGUI {
                     
                     // Send message to server
                     s.send(message, clientName);
-                    System.out.println("\n");
                 }
             }
             // Leave the chat before exiting
