@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ServerImpl implements Server_interface {
 
@@ -61,15 +63,19 @@ public class ServerImpl implements Server_interface {
 
     @Override
     public void sendAll(String message) throws RemoteException {
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String formattedTime = currentTime.format(formatter);
+        String formatedMessage = "[" + formattedTime + "] "+ message;
         for (Client_interface client : clients) {
             try {
-                client.receive(message);
+                client.receive(formatedMessage);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
         try {
-            fw.write(message + '\n');
+            fw.write(formatedMessage + '\n');
             fw.flush();
         } catch (IOException e) {
             e.printStackTrace();

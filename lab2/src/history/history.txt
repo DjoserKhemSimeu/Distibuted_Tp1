@@ -372,3 +372,18 @@ Djoser : test
 Djoser : test
 Djoser : test
 Jason : cool
+Jason has joined the chat.
+
+Jason : hello
+Djoser has joined the chat.
+
+Djoser : hello
+Jason has joined the chat.
+
+Jason : bonjour
+[12:33:47] Jason has joined the chat.
+
+[12:33:53] Jason : Hello
+[12:34:01] Djoser has joined the chat.
+
+[12:34:03] Djoser : test
