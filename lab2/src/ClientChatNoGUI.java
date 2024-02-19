@@ -37,10 +37,13 @@ public class ClientChatNoGUI {
             String message;
             while (true) {
                 message = scanner.nextLine();
+                // Move cursor up one line
+                System.out.print("\033[1A");
                 if (message.equalsIgnoreCase("/exit")) {
                     break;
                 }
                 s.send(message, clientName);
+ 
             }
             
             s.leaveChat(client);
