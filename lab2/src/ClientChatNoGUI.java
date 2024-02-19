@@ -42,7 +42,9 @@ public class ClientChatNoGUI {
                 if (message.equalsIgnoreCase("/exit")) {
                     break;
                 }
-                s.send(message, clientName);
+                if (message != ""){
+                    s.send(message, clientName);
+                }
  
             }
             
