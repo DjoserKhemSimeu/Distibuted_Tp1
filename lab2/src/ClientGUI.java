@@ -147,7 +147,6 @@ public class ClientGUI extends JFrame {
             ClientGUI cg = new ClientGUI(server, clientName);
             Client_interface c = new ClientImpl(clientName, cg);
 
-            server.joinChat(c);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error connecting to server: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
